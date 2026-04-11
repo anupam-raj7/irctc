@@ -1,14 +1,6 @@
--- ============================================================
--- IRCTC Rail Connect - Supabase PostgreSQL Schema
--- Run this entire file in Supabase > SQL Editor > New Query
--- ============================================================
 
--- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- ============================================================
--- USERS TABLE
--- ============================================================
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(100) NOT NULL,
@@ -22,9 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ============================================================
--- TRAINS TABLE
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS trains (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   train_number VARCHAR(10) UNIQUE NOT NULL,
@@ -44,9 +34,7 @@ CREATE TABLE IF NOT EXISTS trains (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ============================================================
--- SEATS TABLE
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS seats (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   train_id UUID REFERENCES trains(id) ON DELETE CASCADE,
@@ -58,9 +46,7 @@ CREATE TABLE IF NOT EXISTS seats (
   UNIQUE(train_id, journey_date, coach_type, seat_number)
 );
 
--- ============================================================
--- BOOKINGS TABLE (with transaction-like logic)
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS bookings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   pnr_number VARCHAR(10) UNIQUE NOT NULL,
@@ -83,9 +69,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ============================================================
--- PAYMENTS TABLE
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS payments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   booking_id UUID REFERENCES bookings(id) ON DELETE CASCADE,
@@ -98,9 +82,7 @@ CREATE TABLE IF NOT EXISTS payments (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ============================================================
--- ACCOUNTS LOG (txt-style log stored in DB)
--- ============================================================
+-
 CREATE TABLE IF NOT EXISTS account_logs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   event_type VARCHAR(50) NOT NULL,
@@ -112,9 +94,7 @@ CREATE TABLE IF NOT EXISTS account_logs (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ============================================================
--- SEED TRAINS DATA
--- ============================================================
+
 INSERT INTO trains (train_number, train_name, from_station, to_station, departure_time, arrival_time, duration, days_of_operation, total_seats, price_sleeper, price_ac3, price_ac2, price_ac1) VALUES
 ('12301','Rajdhani Express','New Delhi','Howrah Junction','16:55','09:55','17h 00m','{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"}',500,765,2055,2955,4950),
 ('12302','Rajdhani Express','Howrah Junction','New Delhi','14:05','07:55','17h 50m','{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"}',500,765,2055,2955,4950),
@@ -127,11 +107,8 @@ INSERT INTO trains (train_number, train_name, from_station, to_station, departur
 ('12951','Mumbai Rajdhani','New Delhi','Mumbai Central','16:00','08:35','16h 35m','{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"}',400,820,2180,3115,5150),
 ('22691','Rajdhani Express','KSR Bengaluru','Hazrat Nizamuddin','20:00','05:55','33h 55m','{"Mon","Thu","Sun"}',350,1005,2705,3870,6390);
 
--- ============================================================
--- FUNCTIONS & TRIGGERS
--- ============================================================
 
--- Auto-update updated_at
+
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
