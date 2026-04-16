@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
@@ -40,6 +40,14 @@ const AppRoutes = () => (
 );
 
 function App() {
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/api/health`)
+      .then(res => res.json())
+      .then(data => console.log("Backend response:", data))
+      .catch(err => console.error("Error:", err));
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>
