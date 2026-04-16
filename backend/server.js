@@ -13,13 +13,22 @@ const PORT = process.env.PORT || 5001;
 
 // ── Middleware ──────────────────────────────────────────────
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:3000',
-    'http://localhost:3000',
-  ],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://irctc-one.vercel.app',
+      'http://localhost:3000'
+    ];
+
+    // allow requests with no origin (Postman, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed: " + origin));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 app.use(express.json({ limit: '10mb' }));
