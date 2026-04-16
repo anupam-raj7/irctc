@@ -3,6 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Train, Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react';
 import api from '../utils/api';
 
+const Field = ({ label, icon, ...props }) => (
+  <div style={{ marginBottom: 14 }}>
+    <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 7, fontWeight: 500 }}>{label}</label>
+    <div style={{ position: 'relative' }}>
+      <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#475569' }}>{icon}</span>
+      <input className="input-field" style={{ paddingLeft: 40 }} {...props} />
+    </div>
+  </div>
+);
+
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
@@ -25,15 +35,15 @@ const RegisterPage = () => {
     } finally { setLoading(false); }
   };
 
-  const Field = ({ label, icon, ...props }) => (
-    <div style={{ marginBottom: 14 }}>
-      <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 7, fontWeight: 500 }}>{label}</label>
-      <div style={{ position: 'relative' }}>
-        <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#475569' }}>{icon}</span>
-        <input className="input-field" style={{ paddingLeft: 40 }} {...props} />
-      </div>
-    </div>
-  );
+  // const Field = ({ label, icon, ...props }) => (
+  //   <div style={{ marginBottom: 14 }}>
+  //     <label style={{ display: 'block', fontSize: 13, color: '#94a3b8', marginBottom: 7, fontWeight: 500 }}>{label}</label>
+  //     <div style={{ position: 'relative' }}>
+  //       <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#475569' }}>{icon}</span>
+  //       <input className="input-field" style={{ paddingLeft: 40 }} {...props} />
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'radial-gradient(ellipse at 70% 20%, rgba(59,130,246,0.07) 0%, transparent 50%)' }}>

@@ -9,7 +9,7 @@ const bookingRoutes = require('./routes/bookings');
 const paymentRoutes = require('./routes/payments');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // ── Middleware ──────────────────────────────────────────────
 app.use(cors({
